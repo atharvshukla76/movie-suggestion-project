@@ -11,11 +11,8 @@ from sklearn.metrics import classification_report
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
-# ======================
-# Load data safely
-# ======================
 
-# Relative path to the CSV in the same repo
+
 file_path = os.path.join(os.path.dirname(__file__), "netflix_titles-2.csv.xlsx")
 
 df = pd.read_excel(file_path)
@@ -23,20 +20,13 @@ df = pd.read_excel(file_path)
 
 df = pd.read_excel(file_path)
 
-# Normalize column names (PREVENTS 90% bugs)
 df.columns = df.columns.str.strip().str.lower()
 
-# ======================
-# Column safety checks
-# ======================
 required_cols = ['duration', 'listed_in', 'release_year', 'rating', 'country', 'type', 'title']
 for col in required_cols:
     if col not in df.columns:
         raise ValueError(f"Required column missing: {col}")
 
-# ======================
-# Feature Engineering
-# ======================
 df['duration'] = df['duration'].astype(str)
 
 df['duration_minutes'] = (
@@ -57,9 +47,6 @@ df['genre_count'] = (
 
 df['release_year'] = pd.to_numeric(df['release_year'], errors='coerce').fillna(0).astype(int)
 
-# ======================
-# Encode categorical columns
-# ======================
 rating_le = LabelEncoder()
 country_le = LabelEncoder()
 type_le = LabelEncoder()
@@ -68,9 +55,6 @@ df['rating_enc'] = rating_le.fit_transform(df['rating'].fillna('Unknown').astype
 df['country_enc'] = country_le.fit_transform(df['country'].fillna('Unknown').astype(str))
 y_encoded = type_le.fit_transform(df['type'].astype(str))
 
-# ======================
-# EDA
-# ======================
 numeric_cols = df.select_dtypes(include=np.number).columns.tolist()
 
 if numeric_cols:
@@ -101,9 +85,6 @@ plt.pie(
 plt.title('Distribution of Netflix Content')
 plt.show()
 
-# ======================
-# Model Training
-# ======================
 features = [
     'duration_minutes',
     'is_season',
@@ -124,18 +105,10 @@ model = RandomForestClassifier(n_estimators=200, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
-# ======================
-# Classification Report (Bulletproof)
-# ======================
 target_names = [str(c) for c in type_le.classes_]
 
-# Return string instead of printing
 classification_report_text = classification_report(y_test, y_pred, target_names=target_names)
 
-# ======================
-# CONTENT-BASED RECOMMENDATION (ADDED FEATURE)
-# ======================
-# Combine text features safely
 df['content_features'] = (
     df['listed_in'].fillna('').astype(str) + ' ' +
     (df['description'].fillna('').astype(str) if 'description' in df.columns else '') + ' ' +
@@ -143,19 +116,13 @@ df['content_features'] = (
     df['rating'].fillna('').astype(str)
 )
 
-# TF-IDF Vectorization
 tfidf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tfidf.fit_transform(df['content_features'])
 
-# Cosine similarity matrix
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
-# Index mapping
 indices = pd.Series(df.index, index=df['title'].astype(str).str.lower()).drop_duplicates()
 
-# ======================
-# Streamlit-safe user functions
-# ======================
 def predict_for_title(user_title, top_n=5):
     """
     Given a title (from UI), return predictions and similar recommendations.
@@ -163,7 +130,6 @@ def predict_for_title(user_title, top_n=5):
     """
     user_title = user_title.strip().lower()
 
-    # Prediction
     matches = df[df['title'].astype(str).str.lower().str.contains(user_title, regex=False)]
     predictions = []
     if not matches.empty:
@@ -172,7 +138,7 @@ def predict_for_title(user_title, top_n=5):
         labels = type_le.inverse_transform(preds)
         predictions = list(zip(matches['title'], labels))
 
-    # Recommendations
+    
     recommendations = []
     if user_title in indices:
         idx = indices[user_title]
