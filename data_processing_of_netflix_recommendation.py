@@ -14,9 +14,12 @@ from sklearn.metrics.pairwise import cosine_similarity
 # ======================
 # Load data safely
 # ======================
-file_path = r"C:\Users\Atharv Shukla\OneDrive\Desktop\my netflix project\netflix_titles-2.csv.xlsx"
-if not os.path.exists(file_path):
-    raise FileNotFoundError(f"File not found: {file_path}")
+
+# Relative path to the CSV in the same repo
+file_path = os.path.join(os.path.dirname(__file__), "netflix_titles-2.csv.xlsx")
+
+df = pd.read_excel(file_path)
+
 
 df = pd.read_excel(file_path)
 
