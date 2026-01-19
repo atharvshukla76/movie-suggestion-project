@@ -1,0 +1,66 @@
+# =============================
+# Python
+# =============================
+__pycache__/
+*.py[cod]
+*$py.class
+
+# =============================
+# Virtual Environments
+# =============================
+venv/
+.venv/
+.env/
+
+# =============================
+# Streamlit
+# =============================
+.streamlit/
+
+# =============================
+# IDEs & Editors
+# =============================
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# =============================
+# OS Files
+# =============================
+.DS_Store
+Thumbs.db
+
+# =============================
+# Logs & Temp Files
+# =============================
+*.log
+*.tmp
+
+# =============================
+# Jupyter
+# =============================
+.ipynb_checkpoints/
+
+# =============================
+# Data & Generated Files
+# =============================
+# Ignore processed or temporary datasets
+processed_*.csv
+processed_*.xlsx
+
+# Keep the main dataset tracked
+!netflix_titles-2.csv.xlsx
+
+# =============================
+# Model Artifacts (future use)
+# =============================
+*.pkl
+*.joblib
+
+# =============================
+# Build / Distribution
+# =============================
+build/
+dist/
+*.egg-info/
