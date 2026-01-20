@@ -11,7 +11,7 @@
 
   Try the app live: Streamlit Demo
 
-  (Replace # with your deployed app link on Streamlit Cloud or Hugging Face Spaces)
+  (https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
 
 📖 Project Overview
 
@@ -27,7 +27,7 @@
   🎯 Content-based recommendations for similar titles
 
 🖥️ Interactive Netflix-style UI using Streamlit
-
+     made UI of streamlit for revommendation system with the help of AI (chatgpt)
 ⚡ Fast recommendations with preprocessed dataset
 
 
