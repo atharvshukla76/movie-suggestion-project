@@ -38,6 +38,12 @@ Thumbs.db
 *.tmp
 
 # =============================
+# Caches
+# =============================
+.cache/
+.pytest_cache/
+
+# =============================
 # Jupyter
 # =============================
 .ipynb_checkpoints/
@@ -45,7 +51,6 @@ Thumbs.db
 # =============================
 # Data & Generated Files
 # =============================
-# Ignore processed or temporary datasets
 processed_*.csv
 processed_*.xlsx
 
@@ -53,14 +58,18 @@ processed_*.xlsx
 !netflix_titles-2.csv.xlsx
 
 # =============================
-# Model Artifacts (future use)
+# Model Artifacts
 # =============================
 *.pkl
 *.joblib
+
+# =============================
+# Python Packaging
+# =============================
+*.egg-info/
 
 # =============================
 # Build / Distribution
 # =============================
 build/
 dist/
-*.egg-info/
