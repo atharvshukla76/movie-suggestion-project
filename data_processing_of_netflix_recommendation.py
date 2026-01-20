@@ -12,20 +12,21 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-
-file_path = os.path.join(os.path.dirname(__file__), "netflix_titles-2.csv.xlsx")
-
-df = pd.read_excel(file_path)
-
+file_path = r"C:\Users\Atharv Shukla\OneDrive\Desktop\my netflix project\netflix_titles-2.csv.xlsx"
+if not os.path.exists(file_path):
+    raise FileNotFoundError(f"File not found: {file_path}")
 
 df = pd.read_excel(file_path)
+
 
 df.columns = df.columns.str.strip().str.lower()
+
 
 required_cols = ['duration', 'listed_in', 'release_year', 'rating', 'country', 'type', 'title']
 for col in required_cols:
     if col not in df.columns:
         raise ValueError(f"Required column missing: {col}")
+
 
 df['duration'] = df['duration'].astype(str)
 
@@ -47,6 +48,7 @@ df['genre_count'] = (
 
 df['release_year'] = pd.to_numeric(df['release_year'], errors='coerce').fillna(0).astype(int)
 
+
 rating_le = LabelEncoder()
 country_le = LabelEncoder()
 type_le = LabelEncoder()
@@ -54,6 +56,7 @@ type_le = LabelEncoder()
 df['rating_enc'] = rating_le.fit_transform(df['rating'].fillna('Unknown').astype(str))
 df['country_enc'] = country_le.fit_transform(df['country'].fillna('Unknown').astype(str))
 y_encoded = type_le.fit_transform(df['type'].astype(str))
+type_mapping = dict(zip(type_le.transform(type_le.classes_), type_le.classes_))
 
 numeric_cols = df.select_dtypes(include=np.number).columns.tolist()
 
@@ -85,6 +88,7 @@ plt.pie(
 plt.title('Distribution of Netflix Content')
 plt.show()
 
+
 features = [
     'duration_minutes',
     'is_season',
@@ -105,9 +109,12 @@ model = RandomForestClassifier(n_estimators=200, random_state=42)
 model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
+
 target_names = [str(c) for c in type_le.classes_]
 
+
 classification_report_text = classification_report(y_test, y_pred, target_names=target_names)
+
 
 df['content_features'] = (
     df['listed_in'].fillna('').astype(str) + ' ' +
@@ -116,12 +123,16 @@ df['content_features'] = (
     df['rating'].fillna('').astype(str)
 )
 
+
 tfidf = TfidfVectorizer(stop_words='english')
 tfidf_matrix = tfidf.fit_transform(df['content_features'])
 
+
 cosine_sim = cosine_similarity(tfidf_matrix, tfidf_matrix)
 
+
 indices = pd.Series(df.index, index=df['title'].astype(str).str.lower()).drop_duplicates()
+
 
 def predict_for_title(user_title, top_n=5):
     """
@@ -130,20 +141,21 @@ def predict_for_title(user_title, top_n=5):
     """
     user_title = user_title.strip().lower()
 
+    
     matches = df[df['title'].astype(str).str.lower().str.contains(user_title, regex=False)]
     predictions = []
+
     if not matches.empty:
         user_X = matches[features].fillna(0)
         preds = model.predict(user_X)
-        labels = type_le.inverse_transform(preds)
+        labels = [type_mapping[p] for p in preds]
         predictions = list(zip(matches['title'], labels))
 
     
     recommendations = []
     if user_title in indices:
         idx = indices[user_title]
-        sim_scores = list(enumerate(cosine_sim[idx]))
-        sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)[1:top_n+1]
+        sim_scores = sorted(list(enumerate(cosine_sim[idx])), key=lambda x: x[1], reverse=True)[1:top_n+1]
         recommendations = [(df.iloc[i[0]]['title'], df.iloc[i[0]]['type']) for i in sim_scores]
 
     return predictions, recommendations
