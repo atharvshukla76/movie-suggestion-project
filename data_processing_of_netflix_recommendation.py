@@ -12,7 +12,8 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-file_path = r"C:\Users\Atharv Shukla\OneDrive\Desktop\my netflix project\netflix_titles-2.csv.xlsx"
+BASE_DIR = os.path.dirname(os.path.abspath(_file_))
+file_path = os.path.join(BASE_DIR, "netflix_titles-2.csv.xlsx")
 if not os.path.exists(file_path):
     raise FileNotFoundError(f"File not found: {file_path}")
 
