@@ -7,8 +7,10 @@
 
 ## 🚀 Live Demo & Deployment
 
-- **Live Deployed App**: [movie-suggestion-project.streamlit.app](https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
-- **Run Locally**:
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
+
+- 🌐 Try the interactive web application: **[Live Demo App](https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)**
+- 💻 **Run Locally**:
 ```bash
 streamlit run netflix_ui.py
 ```
