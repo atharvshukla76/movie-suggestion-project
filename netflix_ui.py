@@ -921,16 +921,31 @@ if st.session_state.active_search_query and len(st.session_state.active_search_q
     # Universal movie search (TMDB global first)
     tmdb_results = tmdb_service.search_movies(q)
     
-    # If no immediate match, check local dataset
-    if not tmdb_results:
-        local_preds, local_recs = predict_for_title(q)
-        if local_preds:
-            matched_title = local_preds[0][0]
-            tmdb_results = tmdb_service.search_movies(matched_title)
+    # If no immediate TMDB match, check local dataset via trained ML model
+    local_preds, local_recs = predict_for_title(q)
+    if not tmdb_results and local_preds:
+        matched_title = local_preds[0][0]
+        tmdb_results = tmdb_service.search_movies(matched_title)
+        if not tmdb_results:
+            matched_df = df[df['title'].astype(str).str.lower() == matched_title.lower()]
+            if not matched_df.empty:
+                m_row = matched_df.iloc[0]
+                tmdb_results = [{
+                    "id": None,
+                    "title": m_row.get("title", matched_title),
+                    "overview": m_row.get("description", "A notable cinematic production from the Netflix catalog."),
+                    "release_year": str(m_row.get("release_year", "2023")),
+                    "release_date": str(m_row.get("date_added", "Netflix Classic")),
+                    "rating": 8.0,
+                    "poster_url": "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+                    "media_type": "movie"
+                }]
 
-    # If still no results, fallback to top trending pool (guaranteed never "not found")
+    # If still no results, search through local curated rows to find closest matching domain title
     if not tmdb_results:
-        tmdb_results = trending_row
+        q_words = [w.lower() for w in q.split() if len(w) >= 3]
+        matched_items = [m for m in (trending_row + new_releases_row + dune_row) if any(w in m.get("title", "").lower() for w in q_words)]
+        tmdb_results = matched_items if matched_items else [trending_row[0]]
 
     best = tmdb_results[0]
     record_user_search(best.get("title", q), best.get("poster_url"), best.get("rating", 8.0))
@@ -994,14 +1009,37 @@ if st.session_state.active_search_query and len(st.session_state.active_search_q
 
     st.markdown("### 🌟 More Like This (Deep AI Recommendations):")
     recs = []
+    # 1. Live TMDB User Preference Graph
     if best.get("id"):
         recs = tmdb_service.get_recommendations_for_movie(best["id"], best.get("media_type", "movie"))
+
+    # 2. Local Machine Learning Cosine Similarity (from data_processing_of_netflix_recommendation.py)
     if not recs:
-        # Fallback to genre-matched recommendations
+        _, local_ai_recs = predict_for_title(best.get("title", q), top_n=6)
+        if local_ai_recs:
+            recs = []
+            for rec_title, rec_type in local_ai_recs:
+                found_list = tmdb_service.search_movies(rec_title)
+                if found_list:
+                    recs.append(found_list[0])
+                else:
+                    recs.append({
+                        "title": rec_title,
+                        "rating": 8.0,
+                        "poster_url": "https://image.tmdb.org/t/p/w500/or06FN3Dka5tukK1e9sl16pB3iy.jpg",
+                        "release_year": "AI Pick",
+                        "media_type": "movie"
+                    })
+
+    # 3. Domain-Specific Genre Cinema (guaranteed specific movies)
+    if not recs:
         top_genre = (details.get("genres") or "").split(",")[0].strip() if details and details.get("genres") else "Action"
         recs = tmdb_service.get_movies_by_genre(top_genre, limit=8)
+
+    # 4. Fallback: Curated list excluding the searched movie so it never duplicates
     if not recs:
-        recs = trending_row
+        recs = [m for m in trending_row if m.get("title", "").lower() != best.get("title", "").lower()]
+
     render_movie_row(recs, max_items=8, key_prefix="search_rec")
 
 # 1. HOME DASHBOARD

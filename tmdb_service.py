@@ -29,17 +29,17 @@ def _resolve_tmdb_ip():
     return _CLOUDFRONT_IPS[0]
 
 def _setup_dns_bypass():
+    # Test if native connection to api.themoviedb.org succeeds (Streamlit Cloud, AWS, GCP, etc.)
     try:
-        # Check if native DNS resolves to a blocked sinkhole (0.0.0.0, 127.0.0.1, or ISP IPv6 sinkhole)
-        res = _orig_getaddrinfo("api.themoviedb.org", 443)
-        ip = res[0][4][0]
-        if not (ip == "0.0.0.0" or ip.startswith("127.") or ip.startswith("2405:")):
-            # Native DNS is working fine (e.g. Streamlit Cloud / AWS / US servers)
-            return
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.settimeout(1.0)
+        s.connect(("api.themoviedb.org", 443))
+        s.close()
+        return
     except Exception:
         pass
 
-    # If blocked by local ISP, route requests to verified CloudFront IP
+    # In restricted/sinkholed ISP environments, route requests to verified CloudFront IP
     active_ip = _resolve_tmdb_ip()
     def _tmdb_safe_getaddrinfo(host, port, *args, **kwargs):
         if host in ["api.themoviedb.org", "themoviedb.org"]:
@@ -51,8 +51,10 @@ def _setup_dns_bypass():
 _setup_dns_bypass()
 
 # ========================================================
-# 2. CONFIGURATION: Load Key from .env
+# 2. CONFIGURATION: Load Key from .env / Secrets / Fallback
 # ========================================================
+DEFAULT_TMDB_API_KEY = "2982a229037f2aff353babf6abea0124"
+
 def load_env():
     env_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
     if os.path.exists(env_path):
@@ -68,6 +70,8 @@ load_env()
 TMDB_API_KEY = os.getenv("TMDB_API_KEY", "")
 if not TMDB_API_KEY and hasattr(st, "secrets") and "TMDB_API_KEY" in st.secrets:
     TMDB_API_KEY = st.secrets["TMDB_API_KEY"]
+if not TMDB_API_KEY:
+    TMDB_API_KEY = DEFAULT_TMDB_API_KEY
 
 BASE_URL = "https://api.themoviedb.org/3"
 IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500"
