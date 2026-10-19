@@ -1,126 +1,168 @@
-🎬 Netflix Recommendation System
+# 🎬 Cineflix • AI Movie Discovery & Recommendation Engine
 
-  Get Personalized Movie & TV Show Suggestions Instantly!
+> **Personalized Cinematic Intelligence, Global Search & Real-Time Recommendations**  
+> Built with Python, Scikit-learn, TMDB API (with DNS-over-HTTPS fallback), and a custom cosmic glassmorphism Streamlit UI.
 
+---
 
+## 🚀 Live Demo & Preview
 
+Run the app locally with a single command:
+```bash
+streamlit run netflix_ui.py
+```
+*Your default browser will automatically open to `http://localhost:8501`.*
 
+---
 
+## 📖 Project Overview
 
-🚀 Live Demo
+**Cineflix** is a next-generation movie discovery and recommendation platform inspired by Netflix and modern streaming architectures. It bridges content-based machine learning with live global cinema metadata to deliver instant, high-fidelity movie recommendations.
 
-  Try the app live: Streamlit Demo
+Unlike traditional static recommenders, Cineflix provides:
+1. **Universal Search Coverage**: Search for **any** movie in the world (e.g. *Avengers: Endgame*, *Dune*, *The Batman*, *Inception*, trailers) and receive high-res posters, ratings, synopsis, streaming providers, and official YouTube trailer links.
+2. **Dual-Core AI Recommendations**: Combines local TF-IDF cosine similarity and Random Forest genre classification with live TMDB user preference graphs.
+3. **Dynamic Search-Tuned Notifications**: The notification popover (`🔔`) recalibrates in real-time based on what you search, alerting you to high-affinity companions (e.g., searching *Avengers: Endgame* immediately recommends *Captain America: Civil War*).
 
+<<<<<<< HEAD
   (https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
+=======
+---
+>>>>>>> cec2787 (feat: upgrade Cineflix to modern AI movie discovery app with dynamic search notifications, TMDB DoH service, and cosmic UI)
 
-📖 Project Overview
+## ✨ Key Features
 
-  This project is a content-based recommendation system inspired by Netflix.
-  It lets users input a movie or TV show and get a list of similar content suggestions instantly.
+### 🔍 Universal Movie & Franchise Search
+- Instant typo-tolerant search across millions of global titles via TMDB.
+- Automatically handles noise words (e.g. searching `"Avengers trailer"` strips noise and resolves directly to *The Avengers* with an official YouTube trailer button).
+- Fallback integration with local ML models ensures **zero** "Movie not found" dead ends.
 
- The system uses Python, Pandas, Scikit-learn, and a Streamlit interface to deliver fast, interactive recommendations based on a curated dataset of Netflix titles.
+### 🔔 Search-Tuned Dynamic Notifications
+- **AI Resonance Matches**: Direct recommendations triggered by your latest search (`"Because you searched for 'Avengers: Endgame', our AI flagged Captain America: Civil War as a 98% match!"`).
+- **Trending in Your Genre**: 4K release alerts based on your recent genre interactions.
+- **Taste Calibration**: Real-time updates to your neural taste profile.
+- Unread notification counter badge (`🔔 (3)`) that resets with "✓ Mark All as Read" and reactivates on new searches.
 
-✨ Features
+### 🧭 Domain-Specific Curated Collections
+- Curated carousels with 100% verified TMDB posters across all major categories:
+  - 🔥 **Trending Now** (*Oppenheimer*, *Avengers: Endgame*, *Interstellar*, *Across the Spider-Verse*, *The Batman*, *Inception*)
+  - 📅 **New Releases 2024** (*Dune: Part Two*, *Deadpool & Wolverine*, *Civil War*, *Inside Out 2*, *Furiosa*, *Godzilla x Kong*)
+  - 🎭 **Genre Rows**: Action, Sci-Fi, Thriller, Comedy, Romance, Horror, Drama, Animation. Each genre strictly features its own verified domain titles.
 
-  🔍 Search any movie or TV show by name
+### 🤍 "Your Space" Personalization Hub
+- **My Watchlist**: Interactive queue with 1-click addition and deletion.
+- **Watch & Search History**: Chronological tracking of every search and watched movie. Click "Re-Search" or "Rewatch" to instantly reload any journey.
+- **My Ratings**: Community & personal rating impressions with reviews.
+- **Cinematic DNA Slate**: High-tech neural tablet showing cluster affinity scores across Sci-Fi, Noir, Psychological Thrillers, and Action.
 
-  🎯 Content-based recommendations for similar titles
+### 🔀 Smart Tools
+- **😊 Mood Explorer**: Filter films by vibe (*Dark & Gritty*, *Mind-Bending*, *Chill & Relaxed*, *Romantic*).
+- **🎲 Surprise Me Roulette**: AI-driven cinema roulette for indecisive movie nights.
+- **⚖️ Side-by-Side Comparison**: Comparative showdown analyzing runtimes, ratings, genres, and audience resonance.
 
-🖥️ Interactive Netflix-style UI using Streamlit
-     made UI of streamlit for revommendation system with the help of AI (chatgpt)
-⚡ Fast recommendations with preprocessed dataset
+### 🌌 Design & Visual Aesthetics
+- Dark liquid-cosmic space theme with ambient particle backdrop.
+- Custom translucent glassmorphism cards (`backdrop-filter: blur(16px)`).
+- Neon cyan accents (`#00f2fe`) and Netflix red interactive hover glows (`#e50914`).
+- Streamlit BaseWeb popover styling with dark translucent dropdowns.
 
+---
 
+## 🗂️ File & Directory Structure
 
-🗂️ File Structure
- Netflix-Recommendation-System/
- │
- ├── data_processing_for_netflix_recommendation.py   # Backend: Data cleaning & recommendation logic
- ├── NetflixUI.py                                   # Frontend: Streamlit interface
- ├── netflix_titles-2.csv.xlsx                      # Dataset: Netflix movie/TV show info
- ├── requirements.txt                               # Python dependencies
- ├── .gitignore                                     # Files to ignore in Git
- └── README.md                                      # Project documentation
+```text
+movie-suggestion-project/
+│
+├── .streamlit/
+│   └── config.toml                   # Theme tokens (dark cosmic) & server config (headless = false)
+├── data_processing_of_netflix_recommendation.py  # Backend: TF-IDF, Cosine Similarity & Random Forest model
+├── netflix_ui.py                     # Frontend: Complete Streamlit interface & view controllers
+├── tmdb_service.py                   # TMDB API Client with DoH (DNS-over-HTTPS) & CloudFront fallback
+├── netflix_titles-2.csv.xlsx         # Dataset: Primary Netflix movie & TV catalog (612 KB)
+├── netflix_clean.csv                 # Dataset: Cleaned, preprocessed dataset for rapid boot (1.78 MB)
+├── requirements.txt                  # Python package dependencies
+├── .env.example                      # Environment variables template
+├── .gitignore                        # Git ignore rules (protects API keys & ignores 456MB model_cache.pkl)
+└── README.md                         # Project documentation
+```
 
-💻 Tech Stack
+> **Note on Datasets**: Both `netflix_titles-2.csv.xlsx` and `netflix_clean.csv` are tracked in the repository (~2 MB combined) so the app can build its recommendation models cleanly on fresh clones or cloud platforms. Large binary cache files (`model_cache.pkl`, ~456 MB) are ignored via `.gitignore` to adhere to GitHub's 100 MB file limit.
 
- Python – Core programming language
+---
 
- Pandas & NumPy – Data manipulation
+## 💻 Tech Stack
 
- Scikit-learn – Content similarity & recommendation logic
+- **Frontend & App Framework**: [Streamlit](https://streamlit.io/) (v1.65+)
+- **Core Language**: Python 3.10+
+- **Machine Learning & NLP**:
+  - `scikit-learn`: TF-IDF Vectorizer, Cosine Similarity, Random Forest Classifier
+  - `joblib`: Fast model persistence and caching
+- **Data Engineering**: `pandas`, `numpy`, `openpyxl`
+- **External Movie APIs & Networking**:
+  - [The Movie Database (TMDB) API](https://www.themoviedb.org/documentation/api)
+  - `requests`: HTTP client with Google DNS-over-HTTPS (DoH) resolution and CloudFront edge routing to bypass ISP sinkholes
+  - YouTube search query engine for trailer playback
 
- Streamlit – Interactive frontend
+---
 
- Matplotlib & Seaborn – Optional visualizations
+## ⚡ Installation & Local Setup
 
-🖼️ Screenshots / Demo
+### 1. Clone the Repository
+```bash
+git clone https://github.com/atharvshukla76/movie-suggestion-project.git
+cd movie-suggestion-project
+```
 
-  <img width="1797" height="898" alt="Screenshot 2026-01-19 185439" src="https://github.com/user-attachments/assets/85d1643d-f72b-46b5-8f30-614049442dea" />
+### 2. Set Up a Virtual Environment
+```bash
+# Windows
+python -m venv venv
+venv\Scripts\activate
 
+# macOS / Linux
+python3 -m venv venv
+source venv/bin/activate
+```
 
+### 3. Install Dependencies
+```bash
+pip install -r requirements.txt
+```
 
+### 4. Configure TMDB API Key (Optional but Recommended)
+Copy the example environment file and add your free TMDB API key:
+```bash
+cp .env.example .env
+```
+Open `.env` and set:
+```env
+TMDB_API_KEY=your_actual_tmdb_api_key_here
+```
+*(If omitted, the app gracefully falls back to the local Scikit-Learn content engine and curated high-definition catalogs).*
 
-⚡ Installation & Usage
+### 5. Launch the Application
+```bash
+streamlit run netflix_ui.py
+```
+*Your browser will launch automatically at `http://localhost:8501`.*
 
-  Clone the repository:
+---
 
- git clone <your-repo-link>
- cd netflix-recommendation-system
+## 🛠️ How the Recommendation Engine Works
 
+1. **Local Content-Based Filtering**:
+   - Features (`listed_in`, `description`, `country`, `rating`) are vectorized into an n-gram TF-IDF matrix.
+   - Pairwise cosine similarity computes affinity scores across all titles.
+   - A Random Forest classifier predicts content type and genre distribution.
+2. **Global Preference Graph (TMDB)**:
+   - Live TMDB integration queries real-time user co-watch habits and thematic similarity vectors.
+   - Resilient DNS-over-HTTPS resolver routes API calls through AWS CloudFront edge IPs, ensuring high availability.
+3. **Typo & Keyword Normalization**:
+   - `difflib` provides fuzzy matching for misspelt titles (e.g., `"stanger things"` → *Stranger Things*).
+   - Noise-stripping regex cleans tokens like `"trailer"`, `"movie"`, `"official"`, and `"4k"`.
 
-Create a virtual environment:
+---
 
- python -m venv venv
+## 📄 License
 
-
-Activate the environment:
-
- Windows: venv\Scripts\activate
-
- Mac/Linux: source venv/bin/activate
-
- Install dependencies:
-
- pip install -r requirements.txt
-
- Run the Streamlit app:
-
- streamlit run NetflixUI.py
-
-
-Enter a movie/TV show name → enjoy recommendations!
-
-📝 Dataset
-
- File: netflix_titles-2.csv.xlsx
-
- Contains: title, type, description, genre, release_year, rating
-
-⚠️ Make sure the dataset is in the same directory as your project.
-
-🔮 Future Improvements
-
- Add collaborative filtering for hybrid recommendations
-
- Incorporate ratings/reviews analysis
-
- Use advanced NLP models for better description similarity
-
- Enhance UI with richer Netflix-like design
-
-🛠️ How It Works
- 
- Load the Netflix dataset
-
- Clean and preprocess title, description, and genre
-
- Build a content-based similarity model
-
- Streamlit UI takes user input
-
- Returns recommended similar content instantly
-
-📄 License
-
- This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE).

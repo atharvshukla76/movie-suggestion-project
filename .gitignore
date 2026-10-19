@@ -6,16 +6,19 @@ __pycache__/
 *$py.class
 
 # =============================
-# Virtual Environments
+# Virtual Environments & Secrets
 # =============================
 venv/
 .venv/
-.env/
+env/
+.env
+.env.*
+!.env.example
 
 # =============================
 # Streamlit
 # =============================
-.streamlit/
+.streamlit/secrets.toml
 
 # =============================
 # IDEs & Editors
@@ -49,27 +52,25 @@ Thumbs.db
 .ipynb_checkpoints/
 
 # =============================
+# Model Artifacts & Large Binaries (>100MB)
+# =============================
+*.pkl
+*.joblib
+model_cache.pkl
+
+# =============================
 # Data & Generated Files
 # =============================
 processed_*.csv
 processed_*.xlsx
 
-# Keep the main dataset tracked
+# Keep the datasets tracked for fresh clones & cloud deployment
 !netflix_titles-2.csv.xlsx
+!netflix_clean.csv
 
 # =============================
-# Model Artifacts
-# =============================
-*.pkl
-*.joblib
-
-# =============================
-# Python Packaging
+# Python Packaging & Build
 # =============================
 *.egg-info/
-
-# =============================
-# Build / Distribution
-# =============================
 build/
 dist/
