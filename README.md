@@ -1,7 +1,13 @@
 # 🎬 Cineflix • AI Movie Discovery & Recommendation Engine
 
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
+[![Author](https://img.shields.io/badge/Author-Atharv%20Shukla-E50914?style=flat&logo=github&logoColor=white)](https://github.com/atharvshukla76)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?logo=python&logoColor=white)](https://www.python.org/)
+[![Scikit-Learn](https://img.shields.io/badge/scikit--learn-F7931E?logo=scikit-learn&logoColor=white)](https://scikit-learn.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 > **Personalized Cinematic Intelligence, Global Search & Real-Time Recommendations**  
-> Built with Python, Scikit-learn, TMDB API (with DNS-over-HTTPS fallback), and a custom cosmic glassmorphism Streamlit UI.
+> Architected and Developed by **[Atharv Shukla](https://github.com/atharvshukla76)**
 
 ---
 
@@ -158,6 +164,18 @@ streamlit run netflix_ui.py
 3. **Typo & Keyword Normalization**:
    - `difflib` provides fuzzy matching for misspelt titles (e.g., `"stanger things"` → *Stranger Things*).
    - Noise-stripping regex cleans tokens like `"trailer"`, `"movie"`, `"official"`, and `"4k"`.
+
+---
+
+## 👨‍💻 Author & Engineering
+
+Designed, engineered, and maintained by **[Atharv Shukla](https://github.com/atharvshukla76)**.
+
+- **GitHub**: [@atharvshukla76](https://github.com/atharvshukla76)
+- **Repository**: [atharvshukla76/movie-suggestion-project](https://github.com/atharvshukla76/movie-suggestion-project)
+- **Live Demo**: [Cineflix on Streamlit Community Cloud](https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
+
+Feel free to open an issue or pull request to contribute, suggest features, or report bugs!
 
 ---
 
