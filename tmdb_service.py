@@ -28,14 +28,27 @@ def _resolve_tmdb_ip():
         pass
     return _CLOUDFRONT_IPS[0]
 
-_active_tmdb_ip = _resolve_tmdb_ip()
+def _setup_dns_bypass():
+    try:
+        # Check if native DNS resolves to a blocked sinkhole (0.0.0.0, 127.0.0.1, or ISP IPv6 sinkhole)
+        res = _orig_getaddrinfo("api.themoviedb.org", 443)
+        ip = res[0][4][0]
+        if not (ip == "0.0.0.0" or ip.startswith("127.") or ip.startswith("2405:")):
+            # Native DNS is working fine (e.g. Streamlit Cloud / AWS / US servers)
+            return
+    except Exception:
+        pass
 
-def _tmdb_safe_getaddrinfo(host, port, *args, **kwargs):
-    if host in ["api.themoviedb.org", "themoviedb.org"]:
-        return _orig_getaddrinfo(_active_tmdb_ip, port, *args, **kwargs)
-    return _orig_getaddrinfo(host, port, *args, **kwargs)
+    # If blocked by local ISP, route requests to verified CloudFront IP
+    active_ip = _resolve_tmdb_ip()
+    def _tmdb_safe_getaddrinfo(host, port, *args, **kwargs):
+        if host in ["api.themoviedb.org", "themoviedb.org"]:
+            return _orig_getaddrinfo(active_ip, port, *args, **kwargs)
+        return _orig_getaddrinfo(host, port, *args, **kwargs)
 
-socket.getaddrinfo = _tmdb_safe_getaddrinfo
+    socket.getaddrinfo = _tmdb_safe_getaddrinfo
+
+_setup_dns_bypass()
 
 # ========================================================
 # 2. CONFIGURATION: Load Key from .env

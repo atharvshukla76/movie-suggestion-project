@@ -5,13 +5,13 @@
 
 ---
 
-## 🚀 Live Demo & Preview
+## 🚀 Live Demo & Deployment
 
-Run the app locally with a single command:
+- **Live Deployed App**: [movie-suggestion-project.streamlit.app](https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
+- **Run Locally**:
 ```bash
 streamlit run netflix_ui.py
 ```
-*Your default browser will automatically open to `http://localhost:8501`.*
 
 ---
 
@@ -24,11 +24,7 @@ Unlike traditional static recommenders, Cineflix provides:
 2. **Dual-Core AI Recommendations**: Combines local TF-IDF cosine similarity and Random Forest genre classification with live TMDB user preference graphs.
 3. **Dynamic Search-Tuned Notifications**: The notification popover (`🔔`) recalibrates in real-time based on what you search, alerting you to high-affinity companions (e.g., searching *Avengers: Endgame* immediately recommends *Captain America: Civil War*).
 
-<<<<<<< HEAD
-  (https://movie-suggestion-project-rk9z9h6u3dhydfuie2pzx7.streamlit.app/)
-=======
 ---
->>>>>>> cec2787 (feat: upgrade Cineflix to modern AI movie discovery app with dynamic search notifications, TMDB DoH service, and cosmic UI)
 
 ## ✨ Key Features
 
